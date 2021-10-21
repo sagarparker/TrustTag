@@ -141,7 +141,7 @@ app.get('/api/getTagData/:id',async(req,res)=>{
             });
             setTimeout(() => {
                 resolve(dataLedger);
-            }, 1000);
+            }, 2000);
            
         });
 
