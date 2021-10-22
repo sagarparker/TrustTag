@@ -138,6 +138,13 @@ app.get('/api/getTagData/:id',async(req,res)=>{
         
         let msgCount = info.sequenceNumber.low;
 
+        if(msgCount <= 0){
+            return res.status(200).json({
+                result:false,
+                msg:"No messages found",
+            });
+        }
+
 
         //Fetch all the data from HCS
         const query = new TopicMessageQuery().setTopicId(topicId).setStartTime(0);
