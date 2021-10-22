@@ -4,11 +4,10 @@ var QRCode = require('qrcode')
 
 const {
     Client,
-    PrivateKey,
-    AccountId,
     TopicMessageQuery,
     TopicCreateTransaction,
     TopicMessageSubmitTransaction,
+    TopicInfoQuery
 } = require("@hashgraph/sdk");
 
 
@@ -88,6 +87,7 @@ app.post('/api/createTag',async(req,res)=>{
 });
 
 // 0.0.2893354
+// 0.0.2901272
 
 
 // Add Data to the tag
@@ -127,39 +127,35 @@ app.post('/api/addDataToTag',async(req,res)=>{
 
 app.get('/api/getTagData/:id',async(req,res)=>{
     try{
+
+        // Get the messages count for a topic ID
         let topicId = req.params.id;
 
+        const topicInfoData = new TopicInfoQuery()
+            .setTopicId(topicId);
 
+        const info = await topicInfoData.execute(client);
+        
+        let msgCount = info.sequenceNumber.low;
+
+
+        //Fetch all the data from HCS
         const query = new TopicMessageQuery().setTopicId(topicId).setStartTime(0);
 
-        const data = new Promise((resolve,reject)=>{
-            let dataLedger = {};
-            query.subscribe(
-                client,
-                (message) => {
-                    dataLedger[message.consensusTimestamp.toDate()] = Buffer.from(message.contents).toString("utf8");
-            });
-            setTimeout(() => {
-                resolve(dataLedger);
-            }, 2000);
-           
+        let dataLedger = {};
+
+        query.subscribe(
+            client,
+            (message) => {
+                dataLedger[message.consensusTimestamp.toDate()] = Buffer.from(message.contents).toString("utf8");
+                if(message.sequenceNumber.low == msgCount){
+                    return res.status(200).json({
+                        result:true,
+                        msg:"Messages fetched",
+                        dataLedger
+                    });
+                }
         });
-
-        data.then((msgs)=>{
-            return res.status(200).json({
-                result:true,
-                msg:"Messages fetched",
-                msgs
-            });
-        }).catch((err)=>{
-            return res.status(500).json({
-                result:false,
-                msg:"There was a problem fetching the messages",
-                err
-            });
-        })
-        
-
 
     }
     catch(err){
