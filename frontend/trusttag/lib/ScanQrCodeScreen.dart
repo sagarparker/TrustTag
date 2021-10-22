@@ -9,29 +9,56 @@ class ScanQrCodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(50, 50, 50, 1),
       appBar: AppBar(
-        title: Text(
-          'TrustTag',
-          style: TextStyle(
-            color: Color.fromRGBO(19, 120, 255, 1),
+        brightness: Brightness.dark,
+        title: Container(
+          child: Row(
+            children: [
+              Image.asset(
+                'assets/logo.png',
+                width: 50,
+                height: 50,
+              ),
+              Text(
+                'TrustTag',
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+            ],
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black54,
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => QRViewExample(),
-            ));
-          },
-          child: Text('Scan a TrustTag'),
-          style: ElevatedButton.styleFrom(
-            primary: Color.fromRGBO(19, 120, 255, 1),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30), // <-- Radius
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/logo.png',
             ),
-          ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => QRViewExample(),
+                ));
+              },
+              child: Text(
+                'Scan TrustTag',
+                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 15),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30), // <-- Radius
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -62,6 +89,7 @@ class _QRViewExampleState extends State<QRViewExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(50, 50, 50, 1),
       body: Column(
         children: <Widget>[
           Expanded(flex: 4, child: _buildQrView(context)),
@@ -74,7 +102,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                     children: [
                       Text(
                         'TrustTag : ${result!.code}',
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 20, color: Colors.white),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -86,7 +114,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                           },
                           child: Text('Check history'),
                           style: ElevatedButton.styleFrom(
-                            primary: Color.fromRGBO(19, 120, 255, 1),
+                            primary: Theme.of(context).primaryColor,
                             shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.circular(30), // <-- Radius
@@ -98,8 +126,8 @@ class _QRViewExampleState extends State<QRViewExample> {
                   )
                 else
                   Text(
-                    'Scan a TrustTag',
-                    style: TextStyle(fontSize: 20),
+                    'Scan the QR code',
+                    style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
               ],
             ),

@@ -12,8 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Color.fromRGBO(24, 119, 242, 1.0),
-        backgroundColor: Colors.white,
+        primaryColor: Colors.orange,
       ),
       home: ScanQrCodeScreen(),
       routes: {TrustHistoryScreen.routeName: (ctx) => TrustHistoryScreen()},

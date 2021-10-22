@@ -14,29 +14,37 @@ class _TrustHistoryScreenState extends State<TrustHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final tagData = ModalRoute.of(context)!.settings.arguments as Map;
-    print(tagData);
-    print(tagData);
     return Scaffold(
+      backgroundColor: Color.fromRGBO(50, 50, 50, 1),
       appBar: AppBar(
+        brightness: Brightness.dark,
         centerTitle: true,
         title: Text(
-          'TrustTag history',
+          'TrustTag ${tagData['tagId']}',
           style: TextStyle(
-            color: Color.fromRGBO(19, 120, 255, 1),
+            color: Theme.of(context).primaryColor,
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black,
+        iconTheme: IconThemeData(
+          color: Theme.of(context).primaryColor, //change your color here
+        ),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        color: Colors.white,
         child: FutureBuilder(
             future: getTagHistory(tagData['tagId']),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting ||
                   snapshot.connectionState == ConnectionState.none) {
-                return Center(child: Text('Fetching history from HCS...'));
+                return Center(
+                    child: Text(
+                  'Fetching history from HCS...',
+                  style: TextStyle(
+                    color: Colors.orange,
+                  ),
+                ));
               }
               if (snapshot.data['result'] == false) {
                 return Center(
@@ -49,13 +57,13 @@ class _TrustHistoryScreenState extends State<TrustHistoryScreen> {
                     child: Text(
                       'No history for the tag found',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16, color: Colors.orange),
                     ),
                   ),
                 );
               }
               if (snapshot.data['result'] == true &&
-                  snapshot.data['msgs'].length == 0) {
+                  snapshot.data['dataLedger'].length == 0) {
                 return Center(
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -66,29 +74,34 @@ class _TrustHistoryScreenState extends State<TrustHistoryScreen> {
                     child: Text(
                       'No history for the tag found',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16, color: Colors.orange),
                     ),
                   ),
                 );
               }
-              print(snapshot.data['msgs']);
               return ListView.builder(
-                  itemCount: snapshot.data['msgs'].length,
+                  itemCount: snapshot.data['dataLedger'].length,
                   itemBuilder: (context, index) {
-                    String key = snapshot.data['msgs'].keys.elementAt(index);
+                    String key =
+                        snapshot.data['dataLedger'].keys.elementAt(index);
                     return new Column(
                       children: <Widget>[
                         new ListTile(
                           subtitle: new Text(
                             "$key",
-                            style: TextStyle(fontSize: 10),
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.orange,
+                            ),
                           ),
                           title: new Text(
-                            "${snapshot.data['msgs'][key]}",
+                            "${snapshot.data['dataLedger'][key]}",
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                         new Divider(
                           height: 2.0,
+                          color: Colors.white,
                         ),
                       ],
                     );
