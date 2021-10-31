@@ -123,6 +123,8 @@ app.post('/api/addDataToTag',async(req,res)=>{
 });
 
 
+let i = 0;
+
 // Add Data to the tag
 
 app.get('/api/getTagData/:id',async(req,res)=>{
@@ -151,9 +153,11 @@ app.get('/api/getTagData/:id',async(req,res)=>{
 
         let dataLedger = {};
 
+
         query.subscribe(
             client,
             (message) => {
+                
                 dataLedger[message.consensusTimestamp.toDate()] = Buffer.from(message.contents).toString("utf8");
                 if(message.sequenceNumber.low == msgCount){
                     return res.status(200).json({

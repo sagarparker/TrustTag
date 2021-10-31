@@ -9,7 +9,7 @@ class ScanQrCodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(50, 50, 50, 1),
+      backgroundColor: Color.fromRGBO(75, 75, 75, 1),
       appBar: AppBar(
         brightness: Brightness.dark,
         title: Container(
@@ -39,7 +39,12 @@ class ScanQrCodeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/logo.png',
+              'assets/Main.png',
+              width: 300,
+              height: 300,
+            ),
+            SizedBox(
+              height: 20,
             ),
             ElevatedButton(
               onPressed: () {
